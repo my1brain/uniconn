@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Clubs - CampusConnect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --coral: #fa709a;
+            --cyan: #30cfd0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 28px;
+            padding: 4rem;
+            color: white;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            filter: blur(100px);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            opacity: 0.95;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .hero-stat {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-stat-label {
+            opacity: 0.95;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Main Layout Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Clubs Section */
+        .clubs-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .section-header {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            background: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text);
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-color: transparent;
+        }
+
+        .filter-tab:hover:not(.active) {
+            border-color: var(--primary);
+        }
+
+        /* Enhanced Club Card */
+        .club-card {
+            background: var(--card);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 3px solid transparent;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            cursor: pointer;
+        }
+
+        .club-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border-color: var(--primary);
+        }
+
+        .club-left {
+            background: var(--bg);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .club-left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.1;
+        }
+
+        .club-logo-large {
+            width: 140px;
+            height: 140px;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .club-name-display {
+            font-size: 1.8rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .club-tagline-display {
+            color: var(--muted);
+            text-align: center;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .club-quick-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            width: 100%;
+            margin-top: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quick-stat {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .quick-stat-value {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .quick-stat-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .club-right {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .club-tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .club-tag {
+            padding: 0.5rem 1rem;
+            background: var(--bg);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .club-info-section {
+            flex: 1;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .info-content h4 {
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-content p {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .club-cta {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--border);
+        }
+
+        .btn {
+            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-card {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .sidebar-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Upcoming Events */
+        .event-item {
+            background: var(--bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .event-item:hover {
+            background: white;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transform: translateX(4px);
+        }
+
+        .event-date {
+            display: inline-block;
+            padding: 0.4rem 0.875rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .event-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-club {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-desc {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        /* Open Positions */
+        .position-item {
+            background: var(--bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .position-item:hover {
+            background: white;
+            border-color: var(--success);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.1);
+        }
+
+        .position-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .position-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .position-badge {
+            padding: 0.4rem 0.875rem;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .position-club {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .position-requirements {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .requirement {
+            padding: 0.35rem 0.75rem;
+            background: white;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            padding: 2rem;
+            overflow-y: auto;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card);
+            border-radius: 28px;
+            max-width: 1400px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.4s;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            position: relative;
+            height: 300px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-radius: 28px 28px 0 0;
+        }
+
+        .close-btn {
+            align-self: flex-end;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: none;
+            color: white;
+            font-size: 1.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-hero {
+            color: white;
+        }
+
+        .modal-club-logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-club-name {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-club-tagline {
+            font-size: 1.3rem;
+            opacity: 0.95;
+        }
+
+        .modal-body {
+            padding: 3rem;
+        }
+
+        .detail-section {
+            margin-bottom: 3rem;
+        }
+
+        .detail-title {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .detail-description {
+            color: var(--muted);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .member-card {
+            background: var(--bg);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .member-card:hover {
+            background: white;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+
+        .member-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 900;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .member-name {
+            font-weight: 900;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-role {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .member-contact {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .modal-event-card {
+            background: var(--bg);
+            border-radius: 20px;
+            padding: 2rem;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .modal-event-card:hover {
+            background: white;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+
+        .openings-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .opening-card {
+            background: var(--bg);
+            border-radius: 20px;
+            padding: 2rem;
+            border-left: 4px solid var(--success);
+            transition: all 0.3s;
+        }
+
+        .opening-card:hover {
+            background: white;
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.1);
+        }
+
+        @media (max-width: 1400px) {
+            .main-grid {
+                grid-template-columns: 1fr 350px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .club-card {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .modal-body {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <div class="logo">CampusConnect</div>
+            <div class="nav-links">
+                <a href="#" class="nav-link">Dashboard</a>
+                <a href="#" class="nav-link">Profile</a>
+                <a href="#" class="nav-link" style="color: var(--primary);">Clubs</a>
+                <a href="#" class="nav-link">Opportunities</a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-content">
+                <h1>🏛️ Campus Clubs</h1>
+                <p>Discover your passion, build your network, create lasting impact</p>
+                
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">25+</div>
+                        <div class="hero-stat-label">Active Clubs</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">500+</div>
+                        <div class="hero-stat-label">Total Members</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">15</div>
+                        <div class="hero-stat-label">Events This Month</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-value">12</div>
+                        <div class="hero-stat-label">Open Positions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-grid">
+            <!-- Clubs Section -->
+            <div class="clubs-section">
+                <div class="section-header">
+                    <h2 class="section-title">🎯 All Clubs</h2>
+                    <div class="filter-tabs">
+                        <button class="filter-tab active">All Clubs</button>
+                        <button class="filter-tab">Technical</button>
+                        <button class="filter-tab">Cultural</button>
+                        <button class="filter-tab">Sports</button>
+                        <button class="filter-tab">Professional</button>
+                    </div>
+                </div>
+
+                <div id="clubsList"></div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Upcoming Events -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">🚀 Upcoming Events</h3>
+                    <div id="upcomingEvents"></div>
+                </div>
+
+                <!-- Open Positions -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">💼 Open Positions</h3>
+                    <div id="openPositions"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="clubModal">
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+
+    <script>
+        const clubsData = [
+            {
+                id: 1,
+                name: "Coding Club",
+                tagline: "Building the future, one line at a time",
+                logo: "💻",
+                gradient: "linear-gradient(135deg, #667eea, #764ba2)",
+                category: "Technical",
+                members: 120,
+                events: 8,
+                projects: 15,
+                tags: ["Programming", "Hackathons", "Web Dev", "AI/ML"],
+                description: "The Coding Club is the heart of tech innovation on campus. We organize hackathons, coding competitions, workshops on cutting-edge technologies, and collaborative projects. Whether you're a beginner or an expert, there's a place for you here.",
+                nextEvent: {
+                    title: "AI/ML Workshop Series",
+                    date: "Jan 25-27, 2025"
+                },
+                president: {
+                    name: "Arjun Mehta",
+                    initials: "AM",
+                    email: "arjun.mehta@college.edu",
+                    phone: "+91 98765 43210"
+                },
+                vicePresident: {
+                    name: "Priya Sharma",
+                    initials: "PS",
+                    email: "priya.sharma@college.edu",
+                    phone: "+91 98765 43211"
+                },
+                pastEvents: [
+                    {
+                        title: "HackMIT 2024 - Internal Selection",
+                        date: "Dec 15, 2024",
+                        description: "Selected 8 students to represent our college at HackMIT. Team worked on AI-powered solutions for healthcare.",
+                        attendees: 45,
+                        location: "Tech Lab"
+                    },
+                    {
+                        title: "Web Development Bootcamp",
+                        date: "Nov 20-22, 2024",
+                        description: "3-day intensive workshop on MERN stack. Participants built 5 full-stack projects from scratch.",
+                        attendees: 60,
+                        location: "Auditorium"
+                    }
+                ],
+                upcomingEvents: [
+                    {
+                        title: "AI/ML Workshop Series",
+                        date: "Jan 25-27, 2025",
+                        description: "Learn machine learning fundamentals, work with TensorFlow and PyTorch. Guest speaker from Google AI will share industry insights.",
+                        attendees: "50 seats available",
+                        location: "Innovation Lab"
+                    },
+                    {
+                        title: "Inter-College Hackathon",
+                        date: "Feb 10-11, 2025",
+                        description: "24-hour hackathon with ₹50K prize pool. Teams of 4. Problem statements from industry partners including Microsoft and Amazon.",
+                        attendees: "100+ expected",
+                        location: "Main Campus"
+                    }
+                ],
+                openings: [
+                    {
+                        role: "Backend Developer",
+                        count: 2,
+                        requirements: ["Node.js", "MongoDB", "REST APIs", "Team Player"],
+                        description: "Help build our club management platform"
+                    },
+                    {
+                        role: "ML Engineer",
+                        count: 1,
+                        requirements: ["Python", "TensorFlow", "Data Analysis", "Research Mindset"],
+                        description: "Work on AI-powered student assistant project"
+                    }
+                ]
+            },
+            {
+                id: 2,
+                name: "Robotics Club",
+                tagline: "Automating tomorrow, today",
+                logo: "🤖",
+                gradient: "linear-gradient(135deg, #fa709a, #fee140)",
+                category: "Technical",
+                members: 85,
+                events: 6,
+                projects: 12,
+                tags: ["IoT", "Embedded Systems", "Automation", "Drones"],
+                description: "Robotics Club focuses on building autonomous systems, drones, and IoT solutions. We compete in national robotics competitions like ABU Robocon and work on real-world automation problems.",
+                nextEvent: {
+                    title: "Drone Building Workshop",
+                    date: "Jan 20-22, 2025"
+                },
+                president: {
+                    name: "Rahul Desai",
+                    initials: "RD",
+                    email: "rahul.desai@college.edu",
+                    phone: "+91 98765 43212"
+                },
+                vicePresident: {
+                    name: "Neha Patel",
+                    initials: "NP",
+                    email: "neha.patel@college.edu",
+                    phone: "+91 98765 43213"
+                },
+                pastEvents: [
+                    {
+                        title: "Robo Wars 2024",
+                        date: "Dec 8, 2024",
+                        description: "Built combat robots and competed in arena battles. Our bot 'Destroyer' reached finals defeating 12 opponents.",
+                        attendees: 35,
+                        location: "Sports Complex"
+                    }
+                ],
+                upcomingEvents: [
+                    {
+                        title: "Drone Building Workshop",
+                        date: "Jan 20-22, 2025",
+                        description: "Build your own drone from scratch. Learn flight mechanics, sensors, and autonomous navigation.",
+                        attendees: "30 seats available",
+                        location: "Robotics Lab"
+                    }
+                ],
+                openings: [
+                    {
+                        role: "Embedded Systems Engineer",
+                        count: 2,
+                        requirements: ["Arduino", "C/C++", "Circuit Design", "Problem Solving"],
+                        description: "Design control systems for autonomous robots"
+                    }
+                ]
+            },
+            {
+                id: 3,
+                name: "Photography Club",
+                tagline: "Capturing moments, creating memories",
+                logo: "📸",
+                gradient: "linear-gradient(135deg, #30cfd0, #330867)",
+                category: "Cultural",
+                members: 95,
+                events: 12,
+                projects: 8,
+                tags: ["Photography", "Videography", "Editing", "Creative Arts"],
+                description: "Photography Club is all about visual storytelling. We cover all campus events, organize photo walks, conduct workshops on advanced techniques, and showcase our work in annual exhibitions.",
+                nextEvent: {
+                    title: "Portrait Photography Masterclass",
+                    date: "Jan 28, 2025"
+                },
+                president: {
+                    name: "Kavya Iyer",
+                    initials: "KI",
+                    email: "kavya.iyer@college.edu",
+                    phone: "+91 98765 43214"
+                },
+                vicePresident: {
+                    name: "Vikram Singh",
+                    initials: "VS",
+                    email: "vikram.singh@college.edu",
+                    phone: "+91 98765 43215"
+                },
+                pastEvents: [
+                    {
+                        title: "Golden Hour Photo Walk",
+                        date: "Dec 12, 2024",
+                        description: "Explored city landmarks during sunset. Captured stunning architectural shots and learned advanced composition techniques.",
+                        attendees: 40,
+                        location: "City Tour"
+                    }
+                ],
+                upcomingEvents: [
+                    {
+                        title: "Portrait Photography Masterclass",
+                        date: "Jan 28, 2025",
+                        description: "Professional photographer from National Geographic will teach portrait techniques, lighting setups, and post-processing.",
+                        attendees: "40 seats available",
+                        location: "Photography Studio"
+                    }
+                ],
+                openings: [
+                    {
+                        role: "Video Editor",
+                        count: 2,
+                        requirements: ["Premiere Pro", "After Effects", "Color Grading", "Storytelling"],
+                        description: "Edit event coverage and create promotional videos"
+                    }
+                ]
+            },
+            {
+                id: 4,
+                name: "Entrepreneurship Cell",
+                tagline: "Ideas to Impact",
+                logo: "💡",
+                gradient: "linear-gradient(135deg, #f093fb, #f5576c)",
+                category: "Professional",
+                members: 110,
+                events: 10,
+                projects: 20,
+                tags: ["Startups", "Business", "Innovation", "Funding"],
+                description: "E-Cell nurtures entrepreneurial mindset through startup competitions, industry expert talks, mentorship programs, and funding connections. We've helped launch 15+ successful student ventures.",
+                nextEvent: {
+                    title: "Startup Bootcamp",
+                    date: "Feb 5-7, 2025"
+                },
+                president: {
+                    name: "Aditya Kapoor",
+                    initials: "AK",
+                    email: "aditya.kapoor@college.edu",
+                    phone: "+91 98765 43216"
+                },
+                vicePresident: {
+                    name: "Sneha Reddy",
+                    initials: "SR",
+                    email: "sneha.reddy@college.edu",
+                    phone: "+91 98765 43217"
+                },
+                pastEvents: [
+                    {
+                        title: "Shark Tank Campus Edition",
+                        date: "Nov 30, 2024",
+                        description: "10 teams pitched their startups to panel of investors. Winners received ₹1L seed funding from alumni investors.",
+                        attendees: 80,
+                        location: "Conference Hall"
+                    }
+                ],
+                upcomingEvents: [
+                    {
+                        title: "Startup Bootcamp",
+                        date: "Feb 5-7, 2025",
+                        description: "Learn business model canvas, pitch deck creation, market research, and growth hacking. Mentored by successful startup founders.",
+                        attendees: "60 seats available",
+                        location: "Innovation Center"
+                    }
+                ],
+                openings: [
+                    {
+                        role: "Marketing Lead",
+                        count: 1,
+                        requirements: ["Social Media", "Content Creation", "Event Management", "Communication"],
+                        description: "Drive club visibility and event promotions"
+                    },
+                    {
+                        role: "Operations Manager",
+                        count: 1,
+                        requirements: ["Project Management", "Coordination", "Documentation", "Leadership"],
+                        description: "Manage events and partner relationships"
+                    }
+                ]
+            },
+            {
+                id: 5,
+                name: "Music Society",
+                tagline: "Where rhythm meets passion",
+                logo: "🎵",
+                gradient: "linear-gradient(135deg, #a8edea, #fed6e3)",
+                category: "Cultural",
+                members: 75,
+                events: 15,
+                projects: 6,
+                tags: ["Music", "Instruments", "Vocals", "Performance"],
+                description: "Music Society is the creative soul of campus. We organize concerts, jam sessions, teach instruments including guitar and piano, and perform at all major college events and competitions.",
+                nextEvent: {
+                    title: "Battle of Bands",
+                    date: "Feb 14, 2025"
+                },
+                president: {
+                    name: "Rohan Malhotra",
+                    initials: "RM",
+                    email: "rohan.malhotra@college.edu",
+                    phone: "+91 98765 43218"
+                },
+                vicePresident: {
+                    name: "Anjali Verma",
+                    initials: "AV",
+                    email: "anjali.verma@college.edu",
+                    phone: "+91 98765 43219"
+                },
+                pastEvents: [
+                    {
+                        title: "Winter Music Fest",
+                        date: "Dec 20, 2024",
+                        description: "6-hour music festival featuring live bands, solo performances, and DJ night. Raised ₹25K for charity.",
+                        attendees: 300,
+                        location: "Open Air Theater"
+                    }
+                ],
+                upcomingEvents: [
+                    {
+                        title: "Battle of Bands",
+                        date: "Feb 14, 2025",
+                        description: "Inter-college band competition. Winner gets professional recording studio session and performs at city music fest.",
+                        attendees: "200+ expected",
+                        location: "Main Stage"
+                    }
+                ],
+                openings: [
+                    {
+                        role: "Sound Engineer",
+                        count: 1,
+                        requirements: ["Audio Mixing", "Equipment Setup", "Technical Knowledge", "Team Work"],
+                        description: "Manage sound systems for events and recordings"
+                    }
+                ]
+            }
+        ];
+
+        // Render functions
+        function renderClubs() {
+            const container = document.getElementById('clubsList');
+            container.innerHTML = clubsData.map(club => `
+                <div class="club-card" onclick="openClub(${club.id})">
+                    <div class="club-left" style="background: ${club.gradient}; background-size: 200% 200%;">
+                        <div class="club-logo-large" style="background: ${club.gradient};">${club.logo}</div>
+                        <h3 class="club-name-display">${club.name}</h3>
+                        <p class="club-tagline-display">${club.tagline}</p>
+                        <div class="club-quick-stats">
+                            <div class="quick-stat">
+                                <div class="quick-stat-value">${club.members}</div>
+                                <div class="quick-stat-label">Members</div>
+                            </div>
+                            <div class="quick-stat">
+                                <div class="quick-stat-value">${club.events}</div>
+                                <div class="quick-stat-label">Events</div>
+                            </div>
+                            <div class="quick-stat">
+                                <div class="quick-stat-value">${club.projects}</div>
+                                <div class="quick-stat-label">Projects</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="club-right">
+                        <div class="club-tags-row">
+                            ${club.tags.map(tag => `<span class="club-tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="club-info-section">
+                            <div class="info-row">
+                                <div class="info-icon">📅</div>
+                                <div class="info-content">
+                                    <h4>Next Event</h4>
+                                    <p>${club.nextEvent.title} • ${club.nextEvent.date}</p>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-icon">💼</div>
+                                <div class="info-content">
+                                    <h4>Open Positions</h4>
+                                    <p>${club.openings.length} position${club.openings.length > 1 ? 's' : ''} available</p>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-icon">👥</div>
+                                <div class="info-content">
+                                    <h4>Leadership</h4>
+                                    <p>${club.president.name} (President), ${club.vicePresident.name} (VP)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="club-cta">
+                            <button class="btn btn-primary">View Full Details →</button>
+                            <button class="btn btn-secondary">Join Club</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderUpcomingEvents() {
+            const container = document.getElementById('upcomingEvents');
+            const allEvents = clubsData.flatMap(club => 
+                club.upcomingEvents.map(event => ({...event, clubName: club.name, clubLogo: club.logo, clubId: club.id}))
+            ).sort((a, b) => new Date(a.date) - new Date(b.date)).slice(0, 5);
+
+            container.innerHTML = allEvents.map(event => `
+                <div class="event-item" onclick="openClub(${event.clubId})">
+                    <span class="event-date">${event.date}</span>
+                    <div class="event-club">${event.clubLogo} ${event.clubName}</div>
+                    <h4 class="event-title">${event.title}</h4>
+                    <p class="event-desc">${event.description}</p>
+                    <div class="event-meta">
+                        <span>👥 ${event.attendees}</span>
+                        <span>📍 ${event.location}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderOpenPositions() {
+            const container = document.getElementById('openPositions');
+            const allPositions = clubsData.flatMap(club => 
+                club.openings.map(opening => ({...opening, clubName: club.name, clubLogo: club.logo, clubId: club.id}))
+            );
+
+            container.innerHTML = allPositions.map(position => `
+                <div class="position-item" onclick="openClub(${position.clubId})">
+                    <div class="position-header">
+                        <h4 class="position-title">${position.role}</h4>
+                        <span class="position-badge">${position.count} Open</span>
+                    </div>
+                    <div class="position-club">${position.clubLogo} ${position.clubName}</div>
+                    <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 0.75rem;">${position.description}</p>
+                    <div class="position-requirements">
+                        ${position.requirements.map(req => `<span class="requirement">✓ ${req}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openClub(clubId) {
+            const club = clubsData.find(c => c.id === clubId);
+            const modal = document.getElementById('clubModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalContent.innerHTML = `
+                <div class="modal-header" style="background: ${club.gradient}">
+                    <button class="close-btn" onclick="closeModal()">✕</button>
+                    <div class="modal-hero">
+                        <div class="modal-club-logo">${club.logo}</div>
+                        <h2 class="modal-club-name">${club.name}</h2>
+                        <p class="modal-club-tagline">${club.tagline}</p>
+                    </div>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="detail-section">
+                        <h3 class="detail-title">📖 About</h3>
+                        <p class="detail-description">${club.description}</p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3 class="detail-title">👥 Leadership Team</h3>
+                        <div class="team-grid">
+                            <div class="member-card">
+                                <div class="member-avatar">${club.president.initials}</div>
+                                <div class="member-name">${club.president.name}</div>
+                                <div class="member-role">President</div>
+                                <div class="member-contact">${club.president.email}</div>
+                                <div class="member-contact">${club.president.phone}</div>
+                            </div>
+                            <div class="member-card">
+                                <div class="member-avatar">${club.vicePresident.initials}</div>
+                                <div class="member-name">${club.vicePresident.name}</div>
+                                <div class="member-role">Vice President</div>
+                                <div class="member-contact">${club.vicePresident.email}</div>
+                                <div class="member-contact">${club.vicePresident.phone}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3 class="detail-title">🚀 Upcoming Events</h3>
+                        <div class="events-grid">
+                            ${club.upcomingEvents.map(event => `
+                                <div class="modal-event-card">
+                                    <span class="event-date">${event.date}</span>
+                                    <h4 class="event-title">${event.title}</h4>
+                                    <p class="event-desc">${event.description}</p>
+                                    <div class="event-meta">
+                                        <span>👥 ${event.attendees}</span>
+                                        <span>📍 ${event.location}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3 class="detail-title">✅ Past Events</h3>
+                        <div class="events-grid">
+                            ${club.pastEvents.map(event => `
+                                <div class="modal-event-card">
+                                    <span class="event-date">${event.date}</span>
+                                    <h4 class="event-title">${event.title}</h4>
+                                    <p class="event-desc">${event.description}</p>
+                                    <div class="event-meta">
+                                        <span>👥 ${event.attendees} attended</span>
+                                        <span>📍 ${event.location}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3 class="detail-title">💼 Open Positions</h3>
+                        <div class="openings-grid">
+                            ${club.openings.map(opening => `
+                                <div class="opening-card">
+                                    <div class="position-header">
+                                        <h4 class="position-title">${opening.role}</h4>
+                                        <span class="position-badge">${opening.count} ${opening.count === 1 ? 'Position' : 'Positions'}</span>
+                                    </div>
+                                    <p style="color: var(--muted); margin: 0.75rem 0;">${opening.description}</p>
+                                    <div class="opening-requirements">
+                                        ${opening.requirements.map(req => `<span class="requirement">✓ ${req}</span>`).join('')}
+                                    </div>
+                                    <button class="btn btn-primary" style="margin-top: 1.5rem; width: 100%;">Apply for this Position</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('clubModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Initialize
+        renderClubs();
+        renderUpcomingEvents();
+        renderOpenPositions();
+
+        // Close modal on outside click
+        document.getElementById('clubModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // ESC key to close
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
