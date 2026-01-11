@@ -135,31 +135,6 @@
             opacity: 1;
         }
 
-        @media (max-width: 1200px) {
-            .main-container {
-                grid-template-columns: 1fr 320px;
-            }
-            
-            .hamburger {
-                display: flex;
-            }
-
-            .sidebar {
-                position: fixed;
-                left: -280px;
-                top: 0;
-                height: 100vh;
-                z-index: 999;
-                transition: left 0.3s ease-in-out;
-                box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-                overflow-y: auto;
-            }
-
-            .sidebar.active {
-                left: 0;
-            }
-        }
-
         .icon-btn {
             width: 40px;
             height: 40px;
@@ -636,8 +611,24 @@
             .main-container {
                 grid-template-columns: 1fr 320px;
             }
+            
+            .hamburger {
+                display: flex;
+            }
+
             .sidebar {
-                display: none;
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100vh;
+                z-index: 999;
+                transition: left 0.3s ease-in-out;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+                overflow-y: auto;
+            }
+
+            .sidebar.active {
+                left: 0;
             }
         }
 
@@ -656,9 +647,19 @@
     </style>
 </head>
 <body>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- Top Navigation -->
     <nav class="top-nav">
-        <div class="logo">CampusConnect</div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="hamburger" id="hamburgerBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="logo">CampusConnect</div>
+        </div>
         <div class="search-bar">
             <span class="search-icon">🔍</span>
             <input type="text" placeholder="Search opportunities, projects, students...">
@@ -676,18 +677,15 @@
     <!-- Main Container -->
     <div class="main-container">
         <!-- Left Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="nav-item active">
                 <span class="nav-icon">🏠</span>
                 <span>Dashboard</span>
             </div>
             <div class="nav-item">
-                <a href="student.html">
-            <span class="nav-icon">👤</span>
-            <span>My Profile</span>
-                </a>
+                <span class="nav-icon">👤</span>
+                <span>My Profile</span>
             </div>
-
             <div class="nav-item">
                 <span class="nav-icon">💼</span>
                 <span>Opportunities</span>
@@ -903,6 +901,59 @@
                     <h3 class="bulletin-title">For You</h3>
                 </div>
                 <div class="bulletin-item">
+                    <div class="item-title">Arjun completed 6 verified projects</div>
+                    <div class="item-meta">Top contributor this month</div>
+                </div>
+                <div class="bulletin-item">
+                    <div class="item-title">AI Club launched new initiative</div>
+                    <div class="item-meta">3 openings available</div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Hamburger menu functionality
+        const hamburger = document.getElementById('hamburgerBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        hamburger.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+
+        // Navigation items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active from all items
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Close sidebar on mobile
+                if (window.innerWidth <= 1200) {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+
+        // Simulate real-time updates
+        function updateNotifications() {
+            const badge = document.querySelector('.notification-badge');
+            let count = parseInt(badge.textContent);
+            setInterval(() => {
+                count = Math.floor(Math.random() * 10) + 1;
+                badge.textContent = count;
+            }, 10000);
+        }
+        updateNotifications();
+    </script>
+</body>
+</html>
                     <div class="item-title">Java opening in Robotics Club</div>
                     <div class="item-meta">92% skill match • 2 hours ago</div>
                 </div>
@@ -923,36 +974,3 @@
                     <h3 class="bulletin-title">Campus Spotlight</h3>
                 </div>
                 <div class="bulletin-item">
-                    <div class="item-title">Arjun completed 6 verified projects</div>
-                    <div class="item-meta">Top contributor this month</div>
-                </div>
-                <div class="bulletin-item">
-                    <div class="item-title">AI Club launched new initiative</div>
-                    <div class="item-meta">3 openings available</div>
-                </div>
-            </div>
-        </aside>
-    </div>
-
-    <script>
-        // Add interactivity
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-
-        // Simulate real-time updates
-        function updateNotifications() {
-            const badge = document.querySelector('.notification-badge');
-            let count = parseInt(badge.textContent);
-            setInterval(() => {
-                count = Math.floor(Math.random() * 10) + 1;
-                badge.textContent = count;
-            }, 10000);
-        }
-        updateNotifications();
-    </script>
-</body>
-</html>
