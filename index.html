@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect - Dashboard</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light-gray: #f1f5f9;
+            --border: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8fafc;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 3rem;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--light-gray);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: grid;
+            grid-template-columns: 260px 1fr 340px;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 90px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            padding: 0.875rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: var(--gray);
+        }
+
+        .nav-item:hover {
+            background: var(--light-gray);
+            color: var(--dark);
+            transform: translateX(4px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Main Feed */
+        .main-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            padding: 2.5rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .welcome-banner h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .welcome-banner p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        /* Opportunity Cards */
+        .opportunity-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .opportunity-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .faculty-icon {
+            background: linear-gradient(135deg, #f59e0b, #f97316);
+        }
+
+        .club-icon {
+            background: linear-gradient(135deg, #06b6d4, #0891b2);
+        }
+
+        .project-icon {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+        }
+
+        .card-content {
+            flex: 1;
+        }
+
+        .card-type {
+            font-size: 0.85rem;
+            color: var(--gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-description {
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .skill-tag {
+            padding: 0.4rem 0.875rem;
+            background: var(--light-gray);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .card-info {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .action-btn {
+            padding: 0.625rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Right Panel - AI Bulletin */
+        .ai-bulletin {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: sticky;
+            top: 90px;
+            height: fit-content;
+        }
+
+        .bulletin-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        .bulletin-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .bulletin-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .bulletin-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .bulletin-item {
+            padding: 1rem;
+            border-radius: 10px;
+            background: var(--light-gray);
+            margin-bottom: 0.75rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .bulletin-item:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .bulletin-item:hover .item-meta {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .item-title {
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+        }
+
+        .item-meta {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .ai-insight {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border: 2px solid var(--primary);
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .ai-icon {
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .readiness-score {
+            text-align: center;
+            padding: 2rem 1.5rem;
+        }
+
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) 0% 64%, var(--light-gray) 64% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .score-inner {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .score-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .score-description {
+            font-size: 0.9rem;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .opportunity-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .opportunity-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .opportunity-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        @media (max-width: 1400px) {
+            .main-container {
+                grid-template-columns: 240px 1fr 320px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr 320px;
+            }
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            .ai-bulletin {
+                display: none;
+            }
+            .search-bar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="logo">CampusConnect</div>
+        <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search opportunities, projects, students...">
+        </div>
+        <div class="nav-actions">
+            <button class="icon-btn">
+                🔔
+                <span class="notification-badge">5</span>
+            </button>
+            <button class="icon-btn">💬</button>
+            <div class="user-avatar">PR</div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="nav-item active">
+                <span class="nav-icon">🏠</span>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item">
+                <a href="student.html">
+            <span class="nav-icon">👤</span>
+            <span>My Profile</span>
+                </a>
+            </div>
+
+            <div class="nav-item">
+                <span class="nav-icon">💼</span>
+                <span>Opportunities</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🚀</span>
+                <span>My Projects</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🏛️</span>
+                <span>Clubs</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Analytics</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </div>
+        </aside>
+
+        <!-- Main Feed -->
+        <main class="main-feed">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <h1>Welcome back, Pranav! 👋</h1>
+                <p>You have 3 new opportunities matching your skills</p>
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Active Projects</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Verified Skills</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">5</div>
+                        <div class="stat-label">Completed Gigs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">64%</div>
+                        <div class="stat-label">Readiness Score</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Opportunity Card 1 - Faculty -->
+            <div class="opportunity-card">
+                <div class="card-header">
+                    <div class="card-icon faculty-icon">👨‍🏫</div>
+                    <div class="card-content">
+                        <div class="card-type">Faculty Project</div>
+                        <h3 class="card-title">Research Assistant – Data Analysis for IoT Study</h3>
+                        <div class="card-meta">
+                            <span>📍 Prof. Sharma, Mechanical Dept</span>
+                            <span>•</span>
+                            <span>⏱️ Posted 2 hours ago</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="card-description">
+                    Need 2 students to help analyze sensor data from our smart irrigation project. You'll work with Python pandas and create visualization reports. Perfect for building real research experience.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Data Analysis</span>
+                    <span class="skill-tag">Excel</span>
+                </div>
+                <div class="card-footer">
+                    <div class="card-info">
+                        <div class="info-item">
+                            <span>⏳</span>
+                            <span>3 weeks</span>
+                        </div>
+                        <div class="info-item">
+                            <span>💰</span>
+                            <span>₹2,000 + Certificate</span>
+                        </div>
+                        <div class="info-item">
+                            <span>👥</span>
+                            <span>12 applied</span>
+                        </div>
+                    </div>
+                    <button class="action-btn btn-primary">Apply Now</button>
+                </div>
+            </div>
+
+            <!-- Opportunity Card 2 - Club -->
+            <div class="opportunity-card">
+                <div class="card-header">
+                    <div class="card-icon club-icon">🏛️</div>
+                    <div class="card-content">
+                        <div class="card-type">Club Opening</div>
+                        <h3 class="card-title">Backend Developer - Club Management System</h3>
+                        <div class="card-meta">
+                            <span>📍 Coding Club</span>
+                            <span>•</span>
+                            <span>⏱️ Posted 5 hours ago</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="card-description">
+                    Building an event management platform for all campus clubs. Need a backend dev who knows Node.js and MongoDB. You'll architect the API and database schema. Great for portfolio building.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">Node.js</span>
+                    <span class="skill-tag">MongoDB</span>
+                    <span class="skill-tag">REST API</span>
+                </div>
+                <div class="card-footer">
+                    <div class="card-info">
+                        <div class="info-item">
+                            <span>⏳</span>
+                            <span>2 months</span>
+                        </div>
+                        <div class="info-item">
+                            <span>🎖️</span>
+                            <span>Leadership Role</span>
+                        </div>
+                        <div class="info-item">
+                            <span>👥</span>
+                            <span>6 members working</span>
+                        </div>
+                    </div>
+                    <button class="action-btn btn-primary">Check Role</button>
+                </div>
+            </div>
+
+            <!-- Opportunity Card 3 - Student Project -->
+            <div class="opportunity-card">
+                <div class="card-header">
+                    <div class="card-icon project-icon">🚀</div>
+                    <div class="card-content">
+                        <div class="card-type">Student Project</div>
+                        <h3 class="card-title">Full-Stack Developer - EdTech Platform</h3>
+                        <div class="card-meta">
+                            <span>📍 Riya Patel, 3rd Year CS</span>
+                            <span>•</span>
+                            <span>⏱️ Posted 1 day ago</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="card-description">
+                    Creating an adaptive learning platform using AI. Frontend is ready, need someone to build the backend infrastructure and integrate ML models. Aiming for inter-college competition submission.
+                </p>
+                <div class="skill-tags">
+                    <span class="skill-tag">React</span>
+                    <span class="skill-tag">Python/Flask</span>
+                    <span class="skill-tag">PostgreSQL</span>
+                </div>
+                <div class="card-footer">
+                    <div class="card-info">
+                        <div class="info-item">
+                            <span>⏳</span>
+                            <span>2-3 months</span>
+                        </div>
+                        <div class="info-item">
+                            <span>🎯</span>
+                            <span>Competition Entry</span>
+                        </div>
+                        <div class="info-item">
+                            <span>👥</span>
+                            <span>3/5 team members</span>
+                        </div>
+                    </div>
+                    <button class="action-btn btn-primary">Join Project</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Panel - AI Bulletin -->
+        <aside class="ai-bulletin">
+            <!-- Readiness Score -->
+            <div class="bulletin-card readiness-score">
+                <div class="score-circle">
+                    <div class="score-inner">
+                        <div class="score-value">64</div>
+                        <div class="score-label">/100</div>
+                    </div>
+                </div>
+                <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Professional Readiness</h3>
+                <p class="score-description">Based on skills, projects, and verified work. Complete 1 more project to reach 70%.</p>
+            </div>
+
+            <!-- AI Insights -->
+            <div class="bulletin-card">
+                <div class="bulletin-header">
+                    <div class="bulletin-icon" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white;">🤖</div>
+                    <h3 class="bulletin-title">AI Insights</h3>
+                </div>
+                <div class="ai-insight">
+                    <div class="item-title">
+                        <span class="ai-icon">💡</span>
+                        Skill Gap Alert
+                    </div>
+                    <div class="item-meta">Learning SQL would unlock 4 database projects matching your backend skills.</div>
+                </div>
+                <div class="ai-insight">
+                    <div class="item-title">
+                        <span class="ai-icon">📈</span>
+                        Growth Tip
+                    </div>
+                    <div class="item-meta">Students with 3+ team projects get 2.5x more interview callbacks.</div>
+                </div>
+            </div>
+
+            <!-- Opportunity Alerts -->
+            <div class="bulletin-card">
+                <div class="bulletin-header">
+                    <div class="bulletin-icon" style="background: linear-gradient(135deg, #f59e0b, #f97316); color: white;">🔔</div>
+                    <h3 class="bulletin-title">For You</h3>
+                </div>
+                <div class="bulletin-item">
+                    <div class="item-title">Java opening in Robotics Club</div>
+                    <div class="item-meta">92% skill match • 2 hours ago</div>
+                </div>
+                <div class="bulletin-item">
+                    <div class="item-title">Prof. Mehta needs Python students</div>
+                    <div class="item-meta">88% match • Research Assistant role</div>
+                </div>
+                <div class="bulletin-item">
+                    <div class="item-title">New ML project needs contributors</div>
+                    <div class="item-meta">75% match • Inter-college competition</div>
+                </div>
+            </div>
+
+            <!-- Student Spotlight -->
+            <div class="bulletin-card">
+                <div class="bulletin-header">
+                    <div class="bulletin-icon" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">⭐</div>
+                    <h3 class="bulletin-title">Campus Spotlight</h3>
+                </div>
+                <div class="bulletin-item">
+                    <div class="item-title">Arjun completed 6 verified projects</div>
+                    <div class="item-meta">Top contributor this month</div>
+                </div>
+                <div class="bulletin-item">
+                    <div class="item-title">AI Club launched new initiative</div>
+                    <div class="item-meta">3 openings available</div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // Add interactivity
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Simulate real-time updates
+        function updateNotifications() {
+            const badge = document.querySelector('.notification-badge');
+            let count = parseInt(badge.textContent);
+            setInterval(() => {
+                count = Math.floor(Math.random() * 10) + 1;
+                badge.textContent = count;
+            }, 10000);
+        }
+        updateNotifications();
+    </script>
+</body>
+</html>
