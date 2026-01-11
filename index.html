@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CampusConnect - Dashboard</title>
+    <title>UniConn - Dashboard</title>
     
     <style>
         * {
@@ -39,14 +39,16 @@
             background: var(--white);
             border-bottom: 1px solid var(--border);
             padding: 0 2rem;
-            height: 70px;
+            min-height: 70px;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 100;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            padding-top: 1rem;
+            padding-bottom: 1rem;
         }
 
         .logo {
@@ -60,12 +62,18 @@
 
         .search-bar {
             flex: 1;
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .search-wrapper {
             position: relative;
         }
 
-        .search-bar input {
+        .search-wrapper input {
             width: 100%;
             padding: 0.75rem 1rem 0.75rem 3rem;
             border: 2px solid var(--border);
@@ -74,7 +82,7 @@
             transition: all 0.3s;
         }
 
-        .search-bar input:focus {
+        .search-wrapper input:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
@@ -88,10 +96,71 @@
             color: var(--gray);
         }
 
+        .interests-container {
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .interests-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray);
+            white-space: nowrap;
+        }
+
+        .interest-tags {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 0.5rem;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0.25rem 0;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            max-width: 100%;
+        }
+
+        .interest-tags::-webkit-scrollbar {
+            display: none;
+        }
+
+        .interest-tag {
+            padding: 0.4rem 0.875rem;
+            background: var(--light-gray);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            white-space: nowrap;
+        }
+
+        .interest-tag:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .interest-tag.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .interest-tag .tag-icon {\n            font-size: 0.95rem;\n        }
+
         .nav-actions {
             display: flex;
             align-items: center;
             gap: 1.5rem;
+            margin-top: 0.5rem;
         }
 
         /* Hamburger Menu */
@@ -192,7 +261,7 @@
         /* Main Layout */
         .main-container {
             display: grid;
-            grid-template-columns: 260px 1fr 340px;
+            grid-template-columns: 260px 1fr;
             gap: 2rem;
             padding: 2rem;
             max-width: 1800px;
@@ -221,6 +290,12 @@
             transition: all 0.3s;
             font-weight: 500;
             color: var(--gray);
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1rem;
+            font-family: inherit;
         }
 
         .nav-item:hover {
@@ -241,6 +316,16 @@
 
         /* Main Feed */
         .main-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
@@ -661,8 +746,62 @@
             <div class="logo">UniConn</div>
         </div>
         <div class="search-bar">
-            <span class="search-icon">🔍</span>
-            <input type="text" placeholder="Search opportunities, projects, students...">
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search opportunities, projects, students...">
+            </div>
+            <div class="interests-container">
+                <div class="interest-tags">
+                    <div class="interest-tag" data-interest="projects">
+                        <span class="tag-icon">🚀</span>
+                        <span>Projects</span>
+                    </div>
+                    <div class="interest-tag" data-interest="research">
+                        <span class="tag-icon">🔬</span>
+                        <span>Research</span>
+                    </div>
+                    <div class="interest-tag" data-interest="clubs">
+                        <span class="tag-icon">🏛️</span>
+                        <span>Clubs</span>
+                    </div>
+                    <div class="interest-tag" data-interest="jobs">
+                        <span class="tag-icon">💼</span>
+                        <span>Jobs</span>
+                    </div>
+                    <div class="interest-tag" data-interest="internships">
+                        <span class="tag-icon">🎓</span>
+                        <span>Internships</span>
+                    </div>
+                    <div class="interest-tag" data-interest="startups">
+                        <span class="tag-icon">💡</span>
+                        <span>Startups</span>
+                    </div>
+                    <div class="interest-tag" data-interest="entrepreneur">
+                        <span class="tag-icon">📊</span>
+                        <span>Entrepreneur Meets</span>
+                    </div>
+                    <div class="interest-tag" data-interest="hackathons">
+                        <span class="tag-icon">⚡</span>
+                        <span>Hackathons</span>
+                    </div>
+                    <div class="interest-tag" data-interest="competitions">
+                        <span class="tag-icon">🏆</span>
+                        <span>Competitions</span>
+                    </div>
+                    <div class="interest-tag" data-interest="workshops">
+                        <span class="tag-icon">🛠️</span>
+                        <span>Workshops</span>
+                    </div>
+                    <div class="interest-tag" data-interest="networking">
+                        <span class="tag-icon">🤝</span>
+                        <span>Networking</span>
+                    </div>
+                    <div class="interest-tag" data-interest="mentorship">
+                        <span class="tag-icon">👥</span>
+                        <span>Mentorship</span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="nav-actions">
             <button class="icon-btn">
@@ -678,40 +817,36 @@
     <div class="main-container">
         <!-- Left Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="nav-item active">
+            <button class="nav-item active" data-page="dashboard">
                 <span class="nav-icon">🏠</span>
                 <span>Dashboard</span>
-            </div>
-            <div class="nav-item">
-                <a href="student.html">
-            <span class="nav-icon">👤</span>
-            <span>My Profile</span>
-                </a>
-            </div>
-            <div class="nav-item">
+            </button>
+            <button class="nav-item" data-page="profile">
+                <span class="nav-icon">👤</span>
+                <span>My Profile</span>
+            </button>
+            <button class="nav-item" data-page="opportunities">
                 <span class="nav-icon">💼</span>
-                <span>Opportunities</span>
-            </div>
-            <div class="nav-item">
+                <span>Opportunities for You</span>
+            </button>
+            <button class="nav-item" data-page="projects">
                 <span class="nav-icon">🚀</span>
                 <span>My Projects</span>
-            </div>
-            <div class="nav-item">
+            </button>
+            <button class="nav-item" data-page="clubs">
                 <span class="nav-icon">🏛️</span>
                 <span>Clubs</span>
-            </div>
-            <div class="nav-item">
+            </button>
+            <button class="nav-item" data-page="analytics">
                 <span class="nav-icon">📊</span>
                 <span>Analytics</span>
-            </div>
-            <div class="nav-item">
-                <span class="nav-icon">⚙️</span>
-                <span>Settings</span>
-            </div>
+            </button>
         </aside>
 
         <!-- Main Feed -->
         <main class="main-feed">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="page-section active">
             <!-- Welcome Banner -->
             <div class="welcome-banner">
                 <h1>Welcome back, Pranav! 👋</h1>
@@ -732,6 +867,130 @@
                     <div class="stat-card">
                         <div class="stat-value">64%</div>
                         <div class="stat-label">Readiness Score</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campus Activity Feed -->
+            <div class="opportunity-card">
+                <div class="card-header">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.5rem;">📰</span>
+                        <h3 class="card-title">Campus Activity Feed</h3>
+                    </div>
+                    <span style="color: var(--gray); font-size: 0.9rem;">Last updated: 2 min ago</span>
+                </div>
+
+                <!-- Feed Item 1 -->
+                <div style="padding: 1.25rem; border-left: 3px solid var(--primary); background: var(--light-gray); border-radius: 8px; margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: start; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; flex-shrink: 0;">AR</div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span style="font-weight: 700; color: var(--dark);">Arjun Mehta</span>
+                                <span style="color: var(--gray); font-size: 0.85rem;">completed a project</span>
+                                <span style="color: var(--gray); font-size: 0.8rem;">• 5 min ago</span>
+                            </div>
+                            <p style="color: var(--dark); margin-bottom: 0.5rem;">🎉 Just completed the <strong>Campus Event Management System</strong> with my team! Big thanks to everyone who contributed.</p>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <span class="skill-tag">React</span>
+                                <span class="skill-tag">Node.js</span>
+                                <span class="skill-tag">MongoDB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feed Item 2 -->
+                <div style="padding: 1.25rem; border-left: 3px solid #f59e0b; background: var(--light-gray); border-radius: 8px; margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: start; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #f59e0b, #f97316); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; flex-shrink: 0;">🏛️</div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span style="font-weight: 700; color: var(--dark);">Coding Club</span>
+                                <span style="color: var(--gray); font-size: 0.85rem;">posted an announcement</span>
+                                <span style="color: var(--gray); font-size: 0.8rem;">• 15 min ago</span>
+                            </div>
+                            <p style="color: var(--dark); margin-bottom: 0.5rem;">🚀 <strong>Inter-College Hackathon</strong> registrations are now open! Form your teams and register by Jan 20th. Prize pool: ₹50,000!</p>
+                            <button class="action-btn" style="padding: 0.5rem 1.25rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; background: var(--primary); color: white; font-size: 0.9rem;">Register Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feed Item 3 -->
+                <div style="padding: 1.25rem; border-left: 3px solid #10b981; background: var(--light-gray); border-radius: 8px; margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: start; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; flex-shrink: 0;">SM</div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span style="font-weight: 700; color: var(--dark);">Prof. Sharma</span>
+                                <span style="color: var(--gray); font-size: 0.85rem;">posted a new opportunity</span>
+                                <span style="color: var(--gray); font-size: 0.8rem;">• 1 hour ago</span>
+                            </div>
+                            <p style="color: var(--dark); margin-bottom: 0.5rem;">🔬 Looking for 2 research assistants for my <strong>IoT Smart Agriculture</strong> project. Python and data analysis skills required. Stipend: ₹3000/month.</p>
+                            <button class="action-btn" style="padding: 0.5rem 1.25rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; background: var(--light-gray); color: var(--dark); font-size: 0.9rem;">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feed Item 4 -->
+                <div style="padding: 1.25rem; border-left: 3px solid #8b5cf6; background: var(--light-gray); border-radius: 8px; margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: start; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #8b5cf6, #a855f7); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; flex-shrink: 0;">RP</div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span style="font-weight: 700; color: var(--dark);">Riya Patel</span>
+                                <span style="color: var(--gray); font-size: 0.85rem;">is looking for team members</span>
+                                <span style="color: var(--gray); font-size: 0.8rem;">• 2 hours ago</span>
+                            </div>
+                            <p style="color: var(--dark); margin-bottom: 0.5rem;">💡 Need a <strong>backend developer</strong> for my EdTech startup project. We're building an AI-powered learning platform. Great opportunity for portfolio!</p>
+                            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
+                                <span class="skill-tag">Python</span>
+                                <span class="skill-tag">Flask</span>
+                                <span class="skill-tag">ML</span>
+                            </div>
+                            <div style="display: flex; gap: 0.75rem; align-items: center;">
+                                <button class="action-btn" style="padding: 0.5rem 1.25rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; background: var(--primary); color: white; font-size: 0.9rem;">Join Project</button>
+                                <span style="color: var(--gray); font-size: 0.85rem;">👥 3/5 members</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feed Item 5 -->
+                <div style="padding: 1.25rem; border-left: 3px solid #06b6d4; background: var(--light-gray); border-radius: 8px; margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: start; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #06b6d4, #0891b2); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; flex-shrink: 0;">🤖</div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span style="font-weight: 700; color: var(--dark);">AI & ML Club</span>
+                                <span style="color: var(--gray); font-size: 0.85rem;">scheduled an event</span>
+                                <span style="color: var(--gray); font-size: 0.8rem;">• 3 hours ago</span>
+                            </div>
+                            <p style="color: var(--dark); margin-bottom: 0.5rem;">📅 <strong>Deep Learning Workshop</strong> this Saturday at 10 AM in Lab 3. Learn about Neural Networks and build your first model. Open to all years!</p>
+                            <div style="display: flex; gap: 0.75rem; align-items: center;">
+                                <button class="action-btn" style="padding: 0.5rem 1.25rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; background: var(--light-gray); color: var(--dark); font-size: 0.9rem;">RSVP</button>
+                                <span style="color: var(--success); font-size: 0.85rem; font-weight: 600;">✓ 45 attending</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feed Item 6 -->
+                <div style="padding: 1.25rem; border-left: 3px solid var(--success); background: var(--light-gray); border-radius: 8px;">
+                    <div style="display: flex; align-items: start; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, var(--success), #059669); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; flex-shrink: 0;">NK</div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <span style="font-weight: 700; color: var(--dark);">Neha Kulkarni</span>
+                                <span style="color: var(--gray); font-size: 0.85rem;">achieved a milestone</span>
+                                <span style="color: var(--gray); font-size: 0.8rem;">• 5 hours ago</span>
+                            </div>
+                            <p style="color: var(--dark); margin-bottom: 0.5rem;">🏆 Just earned the <strong>"Top Contributor"</strong> badge for completing 10 verified projects! Grateful for all the amazing collaborations.</p>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <span style="padding: 0.4rem 0.875rem; background: linear-gradient(135deg, var(--warning), #f97316); color: white; border-radius: 8px; font-size: 0.85rem; font-weight: 600;">⭐ Top Contributor</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -858,60 +1117,690 @@
                     <button class="action-btn btn-primary">Join Project</button>
                 </div>
             </div>
+            </div>
+            <!-- End Dashboard Section -->
+
+            <!-- Profile Section -->
+            <div id="profile-section" class="page-section">
+                <!-- Profile Hero Card -->
+                <div class="opportunity-card" style="padding: 2.5rem;">
+                    <div style="display: grid; grid-template-columns: auto 1fr auto; gap: 2rem; align-items: start;">
+                        <div style="width: 120px; height: 120px; border-radius: 20px; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white; font-weight: 700; box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3); position: relative;">
+                            PR
+                            <div style="position: absolute; bottom: 5px; right: 5px; width: 30px; height: 30px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: 3px solid white;">✓</div>
+                        </div>
+                        
+                        <div>
+                            <h1 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Pranav Ranade</h1>
+                            <p style="font-size: 1.1rem; color: var(--gray); margin-bottom: 1rem;">Full-Stack Developer | AI Enthusiast | Building Real-World Solutions</p>
+                            
+                            <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1rem;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span>🎓</span>
+                                    <span>Computer Science, 3rd Year</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span>🏛️</span>
+                                    <span>MIT College of Engineering</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span>📍</span>
+                                    <span>Pune, India</span>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                                <span style="padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; background: linear-gradient(135deg, #10b981, #059669); color: white;">✓ Faculty Verified</span>
+                                <span style="padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; background: linear-gradient(135deg, #f59e0b, #f97316); color: white;">⭐ Top 5% Contributor</span>
+                                <span style="padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; background: linear-gradient(135deg, #8b5cf6, #a855f7); color: white;">👑 Project Leader (3x)</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <button class="action-btn btn-primary">📥 Download Portfolio</button>
+                            <button class="action-btn" style="padding: 0.625rem 1.5rem; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; background: var(--light-gray); color: var(--dark);">🔗 Share Profile</button>
+                            <button class="action-btn" style="padding: 0.625rem 1.5rem; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; background: var(--light-gray); color: var(--dark);">⚙️ Edit Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Readiness Score -->
+                <div class="opportunity-card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05)); border: 2px solid var(--primary); padding: 2rem;">
+                    <h2 style="font-size: 1.5rem; margin-bottom: 1.5rem; text-align: center; font-weight: 800;">🎯 Professional Readiness Score</h2>
+                    
+                    <div style="display: grid; grid-template-columns: auto 1fr; gap: 3rem; align-items: center;">
+                        <div style="width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(var(--primary) 0% 64%, var(--light-gray) 64% 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);">
+                            <div style="width: 135px; height: 135px; border-radius: 50%; background: var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                <div style="font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">64</div>
+                                <div style="font-size: 0.8rem; color: var(--gray); font-weight: 600;">Industry Ready</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border);">
+                                <span style="font-weight: 600;">Technical Skills</span>
+                                <div style="flex: 1; height: 8px; background: var(--light-gray); border-radius: 10px; margin: 0 1rem; overflow: hidden;">
+                                    <div style="height: 100%; width: 78%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px;"></div>
+                                </div>
+                                <span style="font-weight: 700; color: var(--primary); min-width: 50px; text-align: right;">78/100</span>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border);">
+                                <span style="font-weight: 600;">Project Experience</span>
+                                <div style="flex: 1; height: 8px; background: var(--light-gray); border-radius: 10px; margin: 0 1rem; overflow: hidden;">
+                                    <div style="height: 100%; width: 72%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px;"></div>
+                                </div>
+                                <span style="font-weight: 700; color: var(--primary); min-width: 50px; text-align: right;">72/100</span>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--border);">
+                                <span style="font-weight: 600;">Collaboration</span>
+                                <div style="flex: 1; height: 8px; background: var(--light-gray); border-radius: 10px; margin: 0 1rem; overflow: hidden;">
+                                    <div style="height: 100%; width: 65%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px;"></div>
+                                </div>
+                                <span style="font-weight: 700; color: var(--primary); min-width: 50px; text-align: right;">65/100</span>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 0;">
+                                <span style="font-weight: 600;">Faculty Endorsements</span>
+                                <div style="flex: 1; height: 8px; background: var(--light-gray); border-radius: 10px; margin: 0 1rem; overflow: hidden;">
+                                    <div style="height: 100%; width: 85%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px;"></div>
+                                </div>
+                                <span style="font-weight: 700; color: var(--primary); min-width: 50px; text-align: right;">85/100</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p style="color: var(--gray); text-align: center; margin-top: 1.5rem;">
+                        <strong style="color: var(--primary);">You're in the top 15%</strong> of students. Complete 2 more team projects to reach the <strong>70% milestone</strong>.
+                    </p>
+                </div>
+
+                <!-- Verified Skills -->
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <span style="font-size: 1.5rem;">🎯</span>
+                            <h3 class="card-title">Verified Skills</h3>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                        <div style="background: var(--light-gray); padding: 1.25rem; border-radius: 12px; border: 2px solid transparent; transition: all 0.3s;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <span style="font-weight: 700; font-size: 1rem;">Python</span>
+                                <span style="padding: 0.25rem 0.75rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; background: linear-gradient(135deg, #10b981, #059669); color: white;">Expert</span>
+                            </div>
+                            <div style="height: 8px; background: var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 0.5rem;">
+                                <div style="height: 100%; width: 88%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px;"></div>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; font-size: 0.75rem; color: var(--gray);">
+                                <span style="padding: 0.2rem 0.5rem; background: rgba(16, 185, 129, 0.1); color: var(--success); border-radius: 4px; font-weight: 600;">✓ Faculty</span>
+                                <span style="padding: 0.2rem 0.5rem; background: rgba(16, 185, 129, 0.1); color: var(--success); border-radius: 4px; font-weight: 600;">✓ 4 Projects</span>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--light-gray); padding: 1.25rem; border-radius: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <span style="font-weight: 700; font-size: 1rem;">React.js</span>
+                                <span style="padding: 0.25rem 0.75rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;">Advanced</span>
+                            </div>
+                            <div style="height: 8px; background: var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 0.5rem;">
+                                <div style="height: 100%; width: 76%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px;"></div>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; font-size: 0.75rem;">
+                                <span style="padding: 0.2rem 0.5rem; background: rgba(16, 185, 129, 0.1); color: var(--success); border-radius: 4px; font-weight: 600;">✓ 3 Projects</span>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--light-gray); padding: 1.25rem; border-radius: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <span style="font-weight: 700; font-size: 1rem;">Node.js</span>
+                                <span style="padding: 0.25rem 0.75rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;">Advanced</span>
+                            </div>
+                            <div style="height: 8px; background: var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 0.5rem;">
+                                <div style="height: 100%; width: 72%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px;"></div>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; font-size: 0.75rem;">
+                                <span style="padding: 0.2rem 0.5rem; background: rgba(16, 185, 129, 0.1); color: var(--success); border-radius: 4px; font-weight: 600;">✓ Faculty</span>
+                                <span style="padding: 0.2rem 0.5rem; background: rgba(16, 185, 129, 0.1); color: var(--success); border-radius: 4px; font-weight: 600;">✓ 2 Projects</span>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--light-gray); padding: 1.25rem; border-radius: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <span style="font-weight: 700; font-size: 1rem;">Machine Learning</span>
+                                <span style="padding: 0.25rem 0.75rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; background: linear-gradient(135deg, #f59e0b, #f97316); color: white;">Intermediate</span>
+                            </div>
+                            <div style="height: 8px; background: var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 0.5rem;">
+                                <div style="height: 100%; width: 65%; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 10px;"></div>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; font-size: 0.75rem;">
+                                <span style="padding: 0.2rem 0.5rem; background: rgba(16, 185, 129, 0.1); color: var(--success); border-radius: 4px; font-weight: 600;">✓ Research</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <span style="font-size: 1.5rem;">📊</span>
+                            <h3 class="card-title">Recent Achievements</h3>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        ✅ <strong>Completed ML Project</strong> with Prof. Sharma - IoT Data Analysis<br><br>
+                        ✅ <strong>Led backend development</strong> for Campus Events App (React + Node.js)<br><br>
+                        ✅ <strong>Won 2nd place</strong> in Inter-College Hackathon - Face Recognition Attendance<br><br>
+                        ✅ <strong>Active Member</strong> of AI & Robotics Club, Coding Club<br><br>
+                        ✅ <strong>Mentored 5 juniors</strong> in Full-Stack Development
+                    </p>
+                </div>
+            </div>
+            <!-- End Profile Section -->
+
+            <!-- Opportunities Section -->
+            <div id="opportunities-section" class="page-section">
+                <div class="welcome-banner">
+                    <h1>Opportunities for You 💼</h1>
+                    <p>Personalized opportunities matching your skills and interests</p>
+                    <div class="quick-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">15</div>
+                            <div class="stat-label">New Openings</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Best Matches</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Applied</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">92%</div>
+                            <div class="stat-label">Match Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div class="card-icon faculty-icon">👨‍🏫</div>
+                        <div class="card-content">
+                            <div class="card-type">Research Position</div>
+                            <h3 class="card-title">AI Research Assistant - Machine Learning Lab</h3>
+                            <div class="card-meta">
+                                <span>📍 Dr. Verma, CS Department</span>
+                                <span>•</span>
+                                <span>⏱️ Posted 1 hour ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Work on cutting-edge ML research. Help develop neural network models for image classification. Great opportunity to co-author research papers.
+                    </p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">TensorFlow</span>
+                        <span class="skill-tag">Machine Learning</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-info">
+                            <div class="info-item">
+                                <span>⏳</span>
+                                <span>6 months</span>
+                            </div>
+                            <div class="info-item">
+                                <span>💰</span>
+                                <span>₹5,000/month</span>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-primary">Apply Now</button>
+                    </div>
+                </div>
+
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #10b981, #059669);">💼</div>
+                        <div class="card-content">
+                            <div class="card-type">Internship</div>
+                            <h3 class="card-title">Full Stack Development Intern - TechCorp</h3>
+                            <div class="card-meta">
+                                <span>📍 Remote/Hybrid</span>
+                                <span>•</span>
+                                <span>⏱️ Posted 3 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        3-month paid internship building real-world applications. Work with experienced developers and learn industry best practices.
+                    </p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">MongoDB</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-info">
+                            <div class="info-item">
+                                <span>⏳</span>
+                                <span>3 months</span>
+                            </div>
+                            <div class="info-item">
+                                <span>💰</span>
+                                <span>₹15,000/month</span>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-primary">Apply Now</button>
+                    </div>
+                </div>
+
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div class="card-icon club-icon">🏛️</div>
+                        <div class="card-content">
+                            <div class="card-type">Club Opening</div>
+                            <h3 class="card-title">Web Dev Lead - Coding Club</h3>
+                            <div class="card-meta">
+                                <span>📍 Campus Coding Club</span>
+                                <span>•</span>
+                                <span>⏱️ Posted 1 day ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Lead workshop sessions, mentor juniors, and organize coding events. Build leadership skills while sharing your knowledge.
+                    </p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Teaching</span>
+                        <span class="skill-tag">Leadership</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-info">
+                            <div class="info-item">
+                                <span>⏳</span>
+                                <span>1 year</span>
+                            </div>
+                            <div class="info-item">
+                                <span>🎖️</span>
+                                <span>Leadership Role</span>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-primary">Apply Now</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End Opportunities Section -->
+
+            <!-- Projects Section -->
+            <div id="projects-section" class="page-section">
+                <div class="welcome-banner">
+                    <h1>My Projects 🚀</h1>
+                    <p>Your active and completed projects</p>
+                    <div class="quick-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Active</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">2</div>
+                            <div class="stat-label">Leading</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Team Members</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div class="card-icon project-icon">🎯</div>
+                        <div class="card-content">
+                            <div class="card-type">Active Project • Team Lead</div>
+                            <h3 class="card-title">Campus Events Management Platform</h3>
+                            <div class="card-meta">
+                                <span>📍 Personal Initiative</span>
+                                <span>•</span>
+                                <span>⏱️ Started 2 months ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Full-stack web app for managing college events, RSVPs, and announcements. Currently in beta testing with 200+ student users.
+                    </p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">Node.js</span>
+                        <span class="skill-tag">MongoDB</span>
+                        <span class="skill-tag">AWS</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-info">
+                            <div class="info-item">
+                                <span>📊</span>
+                                <span>75% Complete</span>
+                            </div>
+                            <div class="info-item">
+                                <span>👥</span>
+                                <span>5 team members</span>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-primary">View Details</button>
+                    </div>
+                </div>
+
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b, #f97316);">🤖</div>
+                        <div class="card-content">
+                            <div class="card-type">Active Project • Contributor</div>
+                            <h3 class="card-title">IoT Smart Irrigation System</h3>
+                            <div class="card-meta">
+                                <span>📍 With Prof. Sharma</span>
+                                <span>•</span>
+                                <span>⏱️ Started 3 weeks ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Research project analyzing sensor data to optimize water usage. Working on data visualization and predictive analytics.
+                    </p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Data Analysis</span>
+                        <span class="skill-tag">IoT</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-info">
+                            <div class="info-item">
+                                <span>📊</span>
+                                <span>40% Complete</span>
+                            </div>
+                            <div class="info-item">
+                                <span>💰</span>
+                                <span>₹2,000 stipend</span>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-primary">View Details</button>
+                    </div>
+                </div>
+
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #10b981, #059669);">✅</div>
+                        <div class="card-content">
+                            <div class="card-type">Completed Project</div>
+                            <h3 class="card-title">Student Attendance Tracker</h3>
+                            <div class="card-meta">
+                                <span>📍 Hackathon Winner</span>
+                                <span>•</span>
+                                <span>⏱️ Completed 1 month ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Won 2nd place at Inter-College Hackathon. Built face recognition-based attendance system using ML and mobile app.
+                    </p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">OpenCV</span>
+                        <span class="skill-tag">Flutter</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-info">
+                            <div class="info-item">
+                                <span>🏆</span>
+                                <span>2nd Place</span>
+                            </div>
+                            <div class="info-item">
+                                <span>👥</span>
+                                <span>3 team members</span>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-primary">View Certificate</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End Projects Section -->
+
+            <!-- Clubs Section -->
+            <div id="clubs-section" class="page-section">
+                <div class="welcome-banner">
+                    <h1>Campus Clubs 🏛️</h1>
+                    <p>Join clubs and expand your network</p>
+                    <div class="quick-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Total Clubs</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Your Clubs</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Events This Month</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">200+</div>
+                            <div class="stat-label">Members</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">🤖</div>
+                        <div class="card-content">
+                            <div class="card-type">Your Club • Member</div>
+                            <h3 class="card-title">AI & Machine Learning Club</h3>
+                            <div class="card-meta">
+                                <span>📍 85 Active Members</span>
+                                <span>•</span>
+                                <span>⏱️ Joined 6 months ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Weekly workshops on ML algorithms, AI projects, and research paper discussions. Next workshop: Deep Learning Basics on Saturday.
+                    </p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Machine Learning</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">AI Research</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-info">
+                            <div class="info-item">
+                                <span>📅</span>
+                                <span>Next event: Saturday</span>
+                            </div>
+                            <div class="info-item">
+                                <span>👥</span>
+                                <span>85 members</span>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-primary">View Events</button>
+                    </div>
+                </div>
+
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div class="card-icon club-icon">💻</div>
+                        <div class="card-content">
+                            <div class="card-type">Your Club • Active Member</div>
+                            <h3 class="card-title">Coding Club</h3>
+                            <div class="card-meta">
+                                <span>📍 120 Active Members</span>
+                                <span>•</span>
+                                <span>⏱️ Joined 1 year ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Regular coding contests, hackathons, and peer learning sessions. Organizing inter-college coding competition next month.
+                    </p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Competitive Programming</span>
+                        <span class="skill-tag">Web Dev</span>
+                        <span class="skill-tag">Hackathons</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-info">
+                            <div class="info-item">
+                                <span>🏆</span>
+                                <span>Contest this Friday</span>
+                            </div>
+                            <div class="info-item">
+                                <span>👥</span>
+                                <span>120 members</span>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-primary">Participate</button>
+                    </div>
+                </div>
+
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">🚀</div>
+                        <div class="card-content">
+                            <div class="card-type">Explore • Recommended</div>
+                            <h3 class="card-title">Entrepreneurship Cell</h3>
+                            <div class="card-meta">
+                                <span>📍 65 Active Members</span>
+                                <span>•</span>
+                                <span>⏱️ 3 openings available</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Connect with startup founders, attend entrepreneur talks, and pitch your ideas. Funding support available for promising ventures.
+                    </p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Startups</span>
+                        <span class="skill-tag">Business</span>
+                        <span class="skill-tag">Innovation</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-info">
+                            <div class="info-item">
+                                <span>💡</span>
+                                <span>Pitch Night: Wed</span>
+                            </div>
+                            <div class="info-item">
+                                <span>👥</span>
+                                <span>65 members</span>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-primary">Join Club</button>
+                    </div>
+                </div>
+
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b, #f97316);">🦾</div>
+                        <div class="card-content">
+                            <div class="card-type">Explore • Trending</div>
+                            <h3 class="card-title">Robotics Club</h3>
+                            <div class="card-meta">
+                                <span>📍 45 Active Members</span>
+                                <span>•</span>
+                                <span>⏱️ Recruiting now</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        Build robots, participate in national competitions, and work on automation projects. Lab access and hardware support provided.
+                    </p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Arduino</span>
+                        <span class="skill-tag">Embedded Systems</span>
+                        <span class="skill-tag">Automation</span>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-info">
+                            <div class="info-item">
+                                <span>🔧</span>
+                                <span>Workshop: Tomorrow</span>
+                            </div>
+                            <div class="info-item">
+                                <span>👥</span>
+                                <span>45 members</span>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-primary">Join Club</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End Clubs Section -->
+
+            <!-- Analytics Section -->
+            <div id="analytics-section" class="page-section">
+                <div class="welcome-banner">
+                    <h1>Your Analytics 📊</h1>
+                    <p>Track your progress and performance</p>
+                    <div class="quick-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">24</div>
+                            <div class="stat-label">Profile Views</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">15</div>
+                            <div class="stat-label">Applications</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Interviews</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">↑28%</div>
+                            <div class="stat-label">Growth</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #10b981, #059669);">📈</div>
+                        <div class="card-content">
+                            <div class="card-type">Performance Metrics</div>
+                            <h3 class="card-title">Monthly Activity Report</h3>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        <strong>This Month:</strong><br>
+                        • 5 Project contributions<br>
+                        • 3 New skills added<br>
+                        • 2 Club events attended<br>
+                        • 64% Profile completeness (+12% from last month)
+                    </p>
+                </div>
+
+                <div class="opportunity-card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">🎯</div>
+                        <div class="card-content">
+                            <div class="card-type">Opportunities</div>
+                            <h3 class="card-title">Application Success Rate</h3>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        <strong>Last 3 Months:</strong><br>
+                        • Applications sent: 15<br>
+                        • Interview calls: 8 (53% success)<br>
+                        • Projects joined: 3<br>
+                        • Average response time: 2.5 days
+                    </p>
+                </div>
+            </div>
+            <!-- End Analytics Section -->
         </main>
-
-        <!-- Right Panel - AI Bulletin -->
-        <aside class="ai-bulletin">
-            <!-- Readiness Score -->
-            <div class="bulletin-card readiness-score">
-                <div class="score-circle">
-                    <div class="score-inner">
-                        <div class="score-value">64</div>
-                        <div class="score-label">/100</div>
-                    </div>
-                </div>
-                <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem;">Professional Readiness</h3>
-                <p class="score-description">Based on skills, projects, and verified work. Complete 1 more project to reach 70%.</p>
-            </div>
-
-            <!-- AI Insights -->
-            <div class="bulletin-card">
-                <div class="bulletin-header">
-                    <div class="bulletin-icon" style="background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white;">🤖</div>
-                    <h3 class="bulletin-title">AI Insights</h3>
-                </div>
-                <div class="ai-insight">
-                    <div class="item-title">
-                        <span class="ai-icon">💡</span>
-                        Skill Gap Alert
-                    </div>
-                    <div class="item-meta">Learning SQL would unlock 4 database projects matching your backend skills.</div>
-                </div>
-                <div class="ai-insight">
-                    <div class="item-title">
-                        <span class="ai-icon">📈</span>
-                        Growth Tip
-                    </div>
-                    <div class="item-meta">Students with 3+ team projects get 2.5x more interview callbacks.</div>
-                </div>
-            </div>
-
-            <!-- Opportunity Alerts -->
-            <div class="bulletin-card">
-                <div class="bulletin-header">
-                    <div class="bulletin-icon" style="background: linear-gradient(135deg, #f59e0b, #f97316); color: white;">🔔</div>
-                    <h3 class="bulletin-title">For You</h3>
-                </div>
-                <div class="bulletin-item">
-                    <div class="item-title">Arjun completed 6 verified projects</div>
-                    <div class="item-meta">Top contributor this month</div>
-                </div>
-                <div class="bulletin-item">
-                    <div class="item-title">AI Club launched new initiative</div>
-                    <div class="item-meta">3 openings available</div>
-                </div>
-            </div>
-        </aside>
     </div>
 
     <script>
@@ -935,6 +1824,20 @@
                 document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
                 
+                // Get the page data
+                const page = this.dataset.page;
+                
+                // Hide all page sections
+                document.querySelectorAll('.page-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show the selected page section
+                const targetSection = document.getElementById(`${page}-section`);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+                
                 // Close sidebar on mobile
                 if (window.innerWidth <= 1200) {
                     sidebar.classList.remove('active');
@@ -953,26 +1856,55 @@
             }, 10000);
         }
         updateNotifications();
+
+        // Interest tags functionality
+        const interestTags = document.querySelectorAll('.interest-tag');
+        const searchInput = document.querySelector('.search-bar input');
+        let selectedInterests = [];
+
+        interestTags.forEach(tag => {
+            tag.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('active');
+                
+                const interest = this.dataset.interest;
+                const interestName = this.querySelector('span:last-child').textContent;
+                
+                if (this.classList.contains('active')) {
+                    selectedInterests.push(interestName);
+                } else {
+                    selectedInterests = selectedInterests.filter(i => i !== interestName);
+                }
+                
+                // Update search input with selected interests
+                if (selectedInterests.length > 0) {
+                    searchInput.value = selectedInterests.join(', ');
+                } else {
+                    searchInput.value = '';
+                }
+                
+                // You can add filtering logic here to filter opportunities based on selected interests
+                filterOpportunitiesByInterests();
+            });
+        });
+
+        function filterOpportunitiesByInterests() {
+            // This function can be expanded to filter the opportunity cards based on selected interests
+            console.log('Filtering opportunities by:', selectedInterests);
+            
+            // Example: Show notification of active filters
+            if (selectedInterests.length > 0) {
+                console.log(`Active filters: ${selectedInterests.join(', ')}`);
+            }
+        }
+
+        // Keep interests container visible when clicking inside it
+        const interestsContainer = document.querySelector('.interests-container');
+        if (interestsContainer) {
+            interestsContainer.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
     </script>
 </body>
 </html>
-                    <div class="item-title">Java opening in Robotics Club</div>
-                    <div class="item-meta">92% skill match • 2 hours ago</div>
-                </div>
-                <div class="bulletin-item">
-                    <div class="item-title">Prof. Mehta needs Python students</div>
-                    <div class="item-meta">88% match • Research Assistant role</div>
-                </div>
-                <div class="bulletin-item">
-                    <div class="item-title">New ML project needs contributors</div>
-                    <div class="item-meta">75% match • Inter-college competition</div>
-                </div>
-            </div>
-
-            <!-- Student Spotlight -->
-            <div class="bulletin-card">
-                <div class="bulletin-header">
-                    <div class="bulletin-icon" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">⭐</div>
-                    <h3 class="bulletin-title">Campus Spotlight</h3>
-                </div>
-                <div class="bulletin-item">
